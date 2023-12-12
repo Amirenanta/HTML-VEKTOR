@@ -3,19 +3,181 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Kalkulator Vektor Amirullah RMA IT-102</title>
+    <style>
+        body{
+          background-color: #EFF8E2;
+          font-family: "PT Sans", Calibri, Tahoma, sans-serif;
+        }
+        #content {
+            margin-top: 20px;
+            margin: auto;
+        }
+        input[type=text] {
+	        appearance: none;
+	        border: none;
+	        outline: none;
+        	border-bottom: .2em solid #E91E63;
+        	background: rgba(#E91E63, .2);
+        	border-radius: .2em .2em 0 0;
+        	padding: .4em;
+	        color: #E91E63;
+        }
+        div.radio {
+        	display: grid;
+        	grid-template-columns: 1fr 1fr;
+        	grid-gap: .2em;
+	        margin-left: -2em;
+        }
+        input[type=radio] {
+	        appearance: none;
+         background-color: #fff;
+         margin: 0.4 em;
+	        font: inherit;
+          color: #E91E63;
+          width: 1.15em;
+          height: 1.15em;
+         border: 0.15em solid currentColor;
+          border-radius: 50%;
+        	display: grid;
+         place-content: center;
+        	&::before {
+	        	content: "";
+	        	width: 0.65em;
+	        	height: 0.65em;
+        		border-radius: 50%;
+        		transform: scale(0);
+        		transition: 120ms transform ease-in-out;
+        		box-shadow: inset 1em 1em #E91E63;
+        		background-color: CanvasText;
+        		transform-origin: top bottom;
+        	}
+	        &:checked::before {
+	        	transform: scale(1);
+	        }
+        }
+        button{
+          margin: 2em;
+          appearance: none;
+	        border: .2em solid #E91E63;
+	        background: hsl(0 0 0/0);
+	        padding: .85em 1.5em;
+	         color: #E91E63;
+	         border-radius: 2em;
+	         transition: 1s;
+        	&:hover, &:focus, &:active {
+	      	background: #E91E63;
+		      color: #fff;
+        }
+      }
+    </style>
 </head>
 <body>
-    <h1>2D Vector Calculator</h1>
- <div id="vector-calc">
-    <label for="ve1">Vektor 1</label>
-   <input type="number" id="x1" value="0"><input type="number" id="y1" value="0">
-   <p>&</p>
-    <label for="ve2">Vector 2</label>
-    <<input type="number" id="x2" value="0"><input type="number" id="y2" value="0">
-    <button onclick="calculateMagnitude()">Calculate</button>
- </div>
- <p id="result"></p>
- <script src="vektor.js"></script>
+
+    <h2>Choose an option:</h2>
+    
+    <input type="radio" name="option" id="radioImage" onclick="showContent('image')"> 2D Vector
+    <input type="radio" name="option" id="radioText" onclick="showContent('text')"> 3D Vector
+
+    <div id="content"></div>
+
+    <script>
+        function showContent(option) {
+            var contentDiv = document.getElementById('content');
+
+            if (option === 'image') {
+                contentDiv.innerHTML = `<h2>2D Vector Calculator</h2>
+
+<label for="vector1">Vector 1:</label>
+<input type="text" id="2dv1x" placeholder="X1">
+<input type="text" id="2dv1y" placeholder="Y1">
+<br>
+<label for="vector2">Vector 2:</label>
+<input type="text" id="2dv2x" placeholder="X2">
+<input type="text" id="2dv2y" placeholder="Y2">
+<br>
+<button onclick="twoDAddVectors()">Add Vectors</button>
+<button onclick="twoDSubtractVectors()">Subtract Vectors</button>
+<button onclick="twoDDotProduct()">Dot Product</button>
+<button onclick="twoDMultiplyVectors()">Multiply by Scalar</button>
+<button onclick="twoDTransformVector()">Transform Vector</button>
+
+<h3>Result:</h3>
+<p id="result"></p>`;
+            } else if (option === 'text') {
+                contentDiv.innerHTML = `<h2>3D Vector Calculator</h2>
+
+<label for="vector1">Vector 1:</label>
+<input type="text" id="v1x" placeholder="X1">
+<input type="text" id="v1y" placeholder="Y1">
+<input type="text" id="v1z" placeholder="Z1">
+<br>
+<label for="vector2">Vector 2:</label>
+<input type="text" id="v2x" placeholder="X2">
+<input type="text" id="v2y" placeholder="Y2">
+<input type="text" id="v2z" placeholder="Z2">
+<br>
+<button onclick="addVectors()">Add Vectors</button>
+<button onclick="subtractVectors()">Subtract Vectors</button>
+<button onclick="dotProduct()">Dot Product</button>
+<button onclick="crossProduct()">Cross Product</button>
+<button onclick="multiplyVectors()">Multiply by Scalar</button>
+<button onclick="transformVector()">Transform Vector</button>
+
+<h3>Result:</h3>
+<p id="result"></p>`;
+            }
+        }
+        function getValue(id) {
+      return parseFloat(document.getElementById(id).value) || 0;
+    }
+
+    function formatVector(vector) {
+      return `[${vector.join(', ')}]`;
+    }
+
+    function twoDAddVectors() {
+      const result = [
+        getValue('2dv1x') + getValue('2dv2x'),
+        getValue('2dv1y') + getValue('2dv2y'),
+      ];
+      document.getElementById('result').innerText = formatVector(result);
+    }
+
+    function twoDSubtractVectors() {
+      const result = [
+        getValue('2dv1x') - getValue('2dv2x'),
+        getValue('2dv1y') - getValue('2dv2y'),
+      ];
+      document.getElementById('result').innerText = formatVector(result);
+    }
+
+    function twoDDotProduct() {
+      const result =
+        getValue('2dv1x') * getValue('2dv2x') +
+        getValue('2dv1y') * getValue('2dv2y');
+      document.getElementById('result').innerText = result;
+    }
+
+    function twoDMultiplyVectors() {
+      const scalar = parseFloat(prompt('Enter the scalar value:')) || 0;
+      const result = [
+        getValue('2dv1x') * scalar,
+        getValue('2dv1y') * scalar,
+      ];
+      document.getElementById('result').innerText = formatVector(result);
+    }
+
+    function twoDTransformVector() {
+      const scalar = parseFloat(prompt('Enter the scalar value for transformation:')) || 0;
+      const result = [
+        getValue('2dv1x') * scalar,
+        getValue('2dv1y') * scalar,
+      ];
+      document.getElementById('result').innerText = formatVector(result);
+    }
+
+    </script>
+
 </body>
 </html>
